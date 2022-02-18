@@ -1,0 +1,152 @@
+﻿<!-- nav -->
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+  <div class="navbar-nav">
+    <a class="nav-item nav-link" (click)="logout()">Logout</a>
+  </div>
+</nav>
+
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true" *ngIf="spinnerVisible"><p style="color: white"> Loading... </p></ngx-spinner>
+
+
+<div class="p-2">
+    <div class="container">
+        <h1 align="right" style="margin-top: 10px">Hi {{user}}</h1>
+
+      <div class="row">
+        <div class="col"><h2>Send to Review</h2>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Git Revision No" aria-label="Git Revision No" aria-describedby="basic-addon1" id="versionNo" name="versionNo" #versionNo>
+
+            <div class="input-group" style="margin-top: 5px">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Commit Description</span>
+              </div>
+              <textarea class="form-control" aria-label="With textarea" id="commitDescription" name="commitDescription" #commitDescription></textarea>
+              <button style="margin-left: 5px" type="button" class="btn btn-primary" (click)="sendReview(versionNo.value, commitDescription.value)">Send</button>
+
+            </div>
+
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 20px">
+        <div class="col"><h2>Review List</h2>
+
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let item of items">
+              <div class="row">
+                <div class="col">
+                  {{item.keyId}}
+                </div>
+                <div class="col">
+                  {{item.reviewUser}}
+                </div>
+                <div class="col">
+                  {{item.reviewDate}}
+                </div>
+                <div class="col">
+                  {{item.reviewDescription}}
+                </div>
+                <div class="col">
+                  <a href="#" class="badge badge-success" *ngIf="item.isreview=='yes'">Reviewed</a>
+                  <a href="#" class="badge badge-warning" *ngIf="item.isreview!='yes'">Waiting</a>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop" (click)="getDetail(item)">
+                    Details
+                  </button>
+                  </div>
+                    <div class="col">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticReviewConfirm" (click)="confirmWindow(item.keyId)">
+                    Review
+                  </button>
+                    </div>
+                </div>
+
+              </div>
+              </li>
+          </ul>
+
+        </div>
+      </div>
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Reviewed</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <ul class="list-group">
+                <li class="list-group-item" *ngFor="let activeItem of activeItemList">
+                  <div class="row">
+                    <div class="col">
+                      {{activeItem.keyId}}
+                    </div>
+                    <div class="col">
+                      {{activeItem.reviewUser}}
+                    </div>
+                    <div class="col">
+                      {{activeItem.reviewDate}}
+                    </div>
+                    <div class="col">
+                      {{activeItem.reviewDescription}}
+                    </div>
+
+
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Confirm Window -->
+      <div class="modal fade" id="staticReviewConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticReviewConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticReviewConfirmLabel">Confirm</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Review Description</span>
+                </div>
+                <textarea class="form-control" aria-label="With textarea" id="description" name="description" #description></textarea>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="confirmReview(description.value)">Reviewed</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+</div>
